@@ -17,7 +17,8 @@ Para verlo: abrir `index.html` en el navegador. Para publicarlo: GitHub Pages de
 1. Descargar la agenda actualizada y guardarla como `contenido/visitas/agenda.xlsx`.
 2. Ejecutar `python3 herramientas/visitantes.py` (necesita `pip install openpyxl`).
 
-Solo cuenta las visitas con «x» o la hora de ingreso en la columna «Realizada».
+Cuenta las reservas con fecha pasada, salvo las que tengan en «Realizada» una nota distinta de «x» o la hora (por ejemplo «?» o «por confirmar»).
+Los nombres de colegios y su municipio salen de `herramientas/instituciones.csv`: para que una institución nueva aparezca en la nube, agregar una fila (patrón;nombre;municipio;departamento). Solo nombres de instituciones, nunca de personas.
 
 ## Actualizar el explorador de colecciones
 

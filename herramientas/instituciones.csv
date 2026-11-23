@@ -1,0 +1,90 @@
+patron;nombre;municipio;departamento
+# Una fila por institución. «patron» es una expresión regular que se busca (sin distinguir mayúsculas)
+# en el nombre, tipo de pago y observación de cada reserva; gana la primera fila que coincida,
+# así que las más específicas van primero. Municipio vacío = sin confirmar.
+# Departamento vacío = Santander.
+normal superior de bucaramanga;Escuela Normal Superior de Bucaramanga;Bucaramanga;
+normal superior( de)? piedecuesta;Escuela Normal Superior de Piedecuesta;Piedecuesta;
+bethlemitas;Colegio Sagrado Corazón de Jesús – Hermanas Bethlemitas;Barrancabermeja;
+fundaci[oó]n colegio uis;Fundación Colegio UIS;;
+colegio la merced;Colegio La Merced;;
+nuestra se[nñ]ora del rosario;Colegio Nuestra Señora del Rosario;;
+f[aá]tima;Colegio Nuestra Señora de Fátima;Bucaramanga;
+glenn doman;Glenn Doman Escuela Precoz;Bucaramanga;
+new ?port;Newport School;Floridablanca;
+d[aá]maso zapata;Instituto Técnico Dámaso Zapata;Bucaramanga;
+liceo san fe[rn]+ando;Liceo San Fernando;Lebrija;
+\binem\b;INEM Custodio García Rovira;Bucaramanga;
+aguada de ceferino;I. E. Aguada de Ceferino;Girón;
+panamericano;Colegio Panamericano;Floridablanca;
+piloto sim[oó]n bol[ií]var;I. E. Piloto Simón Bolívar;Bucaramanga;
+promoci[oó]n social del norte;I. E. Promoción Social del Norte;Bucaramanga;
+unidades tecnol[oó]gicas;Unidades Tecnológicas de Santander;Bucaramanga;
+reina de la paz;Colegio Reina de la Paz;;
+gabriela mistral;I. E. Gabriela Mistral;;
+bicentenario;Colegio Bicentenario;Bucaramanga;
+reggio amelia;Colegio Reggio Amelia;Bucaramanga;
+instituto caldas;Instituto Caldas;Bucaramanga;
+san pedro claver;Colegio San Pedro Claver;Bucaramanga;
+ricaurte de soacha;I. E. Ricaurte;Soacha;Cundinamarca
+los cedros;Colegio Los Cedros;;
+unipaz;UNIPAZ;Barrancabermeja;
+campo hermoso;I. E. Campo Hermoso;Bucaramanga;
+rodolfo llin[aá]s;Liceo Bilingüe Rodolfo Llinás;Barrancabermeja;
+colegio santander;Colegio Santander;Bucaramanga;
+colegio barranca;Colegio Barranca;;
+jos[eé] antonio gal[aá]n;Instituto José Antonio Galán;;
+[eé]mois;Colegio Émois;;
+humberto g[oó]mez nigrinis;Colegio Humberto Gómez Nigrinis;;
+ni[nñ]o jes[uú]s de praga;Colegio Niño Jesús de Praga;;
+americano santander de lebrija;Colegio Americano Santander;Lebrija;
+colegio americano;Colegio Americano;Bucaramanga;
+roberto garc[ií]a pe[nñ]a;Colegio Roberto García Peña;;
+montessori;Institución Montessori Liceo Internacional;;
+cooperativo comfenalco;Colegio Cooperativo Comfenalco;Bucaramanga;
+nuestra se[nñ]ora del pilar;Colegio Nuestra Señora del Pilar;Bucaramanga;
+maipore;I. E. Maiporé;Floridablanca;
+escuela municipal de artes;Escuela Municipal de Artes;;
+happy hands;Jardín Infantil Happy Hands;;
+gabriel garc[ií]a m[aá]rquez;Instituto Gabriel García Márquez;Floridablanca;
+instituto del oriente;Instituto del Oriente;Piedecuesta;
+llanada;I. E. Llanadas;Lebrija;
+adventista nazareth;Colegio Adventista Nazareth;;
+san antonio de padua;Colegio Integrado San Antonio de Padua;California;
+alfredo nobel;I. E. Técnica Agropecuaria Alfredo Nobel;;
+gustavo duarte;Instituto Técnico Gustavo Duarte Alemán;Floridablanca;
+aspaen;Colegio Aspaen;;
+gimnasio san diego;Gimnasio San Diego;;
+sur ?colombiana;Universidad Surcolombiana, sede Pitalito;Pitalito;Huila
+jorge eli[eé]cer gait[aá]n;Colegio Jorge Eliécer Gaitán;;
+nieves cort[eé]s;Colegio Nieves Cortés Picón;Girón;
+universidad distrital;Universidad Distrital;Bogotá;Bogotá
+la cumbre;Instituto Técnico La Cumbre;Floridablanca;
+po?rtugal;Colegio Portugal;;
+girasoles;Colegio Los Girasoles School;;
+ternurarte;Fundación Ternurarte;;
+llano de palmas;Colegio Llano de Palmas;Rionegro;
+santa cruz;I. E. Colegio Santa Cruz;;
+enlace social;Fundación Enlace Social;;
+skolmi;Institución Educativa Skolmi;;
+fundaci[oó]n social rad;Fundación Social RAD;;
+la laguna;I. E. La Laguna;Los Santos;
+beth shalom;Colegio Beth Shalom;;
+colegio marta;I. E. Colegio Marta;;
+\bsena\b;SENA;;
+la fuente tabacal;I. E. La Fuente Tabacal;;
+camilo torres, el play[oó]n;Instituto Integrado de Comercio Camilo Torres;El Playón;
+eloy valenzuela;I. E. Tecnológico Salesiano Eloy Valenzuela;;
+las am[eé]ricas sabana de torres;Colegio de las Américas;Sabana de Torres;
+ca[nñ]averal;Instituto Integrado Cañaveral;Floridablanca;
+madre del buen consejo;Instituto Madre del Buen Consejo;;
+portal campestre;Colegio Portal Campestre Norte;Girón;
+pamplona;Universidad de Pamplona;Pamplona;Norte de Santander
+institución educativa san miguel;I. E. San Miguel;;
+universidad de la salle;Universidad de La Salle;Bogotá;Bogotá
+quebradas;I. E. Quebradas;;
+new cambridge;Colegio Nuevo Cambridge;Floridablanca;
+pontificia bolivariana;Universidad Pontificia Bolivariana;Floridablanca;
+eduardo camacho gamba;Colegio Eduardo Camacho Gamba;Bucaramanga;
+\budes\b;Universidad de Santander (UDES);Bucaramanga;
+universidad (de la )?amazonia;Universidad de la Amazonia;Florencia;Caquetá

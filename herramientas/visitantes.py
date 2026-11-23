@@ -1,11 +1,14 @@
-"""Genera la sección «Nuestros visitantes» de index.html a partir de la agenda de reservas.
+"""Genera la sección «Nuestros visitantes» de index.html (cifras, nube de instituciones y municipios)
+a partir de la agenda de reservas y de herramientas/instituciones.csv.
 
 Uso:  python3 herramientas/visitantes.py [contenido/visitas/agenda.xlsx]
 Requiere openpyxl (pip install openpyxl). La agenda tiene datos personales y vive en
 contenido/ (no se sube a GitHub); a la página solo llegan cifras agregadas.
 """
 import re
+from html import escape
 import sys
+import zlib
 from collections import Counter
 from datetime import datetime, time
 from pathlib import Path
@@ -51,8 +54,39 @@ assert realizada("x") and realizada(" X ") and realizada(time(10, 13))
 assert not realizada(None) and not realizada("?") and not realizada("por confirmar")
 
 
-def leer(ruta):
-    """Filas (fecha, categoría, personas) de las visitas realizadas, en todas las hojas mensuales."""
+def cargar_instituciones(ruta):
+    """Tabla curada de instituciones: (patrón, nombre, municipio, departamento)."""
+    lineas = [l for l in ruta.read_text(encoding="utf-8").splitlines()[1:] if l.strip() and not l.startswith("#")]
+    return [(re.compile(p, re.I), n, m, d or "Santander") for p, n, m, d in (l.split(";") for l in lineas)]
+
+
+INSTITUCIONES = cargar_instituciones(Path(__file__).with_name("instituciones.csv"))
+
+
+def institucion(texto):
+    """Primera institución de la tabla cuyo patrón aparece en el texto de la reserva, o None."""
+    return next(((n, m, d) for p, n, m, d in INSTITUCIONES if p.search(texto)), None)
+
+
+assert institucion("Grupo Colegio Nieves Cortés Picón de Girón SENA")[0] == "Colegio Nieves Cortés Picón"
+assert institucion("Colegio Americano Santander de Lebrija")[2] == "Santander"
+assert institucion("I.E. INEM Custodio García Rovira")[1] == "Bucaramanga"
+assert institucion("2 c.uis y 1 menor") is None
+
+
+def cuenta(marca, fecha, hoy):
+    """Reserva con fecha pasada: cuenta si está marcada como realizada o si nadie la marcó.
+    Notas como «?» o «por confirmar» la excluyen."""
+    return fecha <= hoy and (realizada(marca) or not str(marca or "").strip())
+
+
+assert cuenta(None, datetime(2026, 1, 1), datetime(2026, 2, 1))
+assert not cuenta("?", datetime(2026, 1, 1), datetime(2026, 2, 1))
+assert not cuenta(None, datetime(2026, 3, 1), datetime(2026, 2, 1))
+
+
+def leer(ruta, hoy):
+    """Filas (fecha, categoría, personas, institución) de las reservas que cuentan, en todas las hojas."""
     libro = openpyxl.load_workbook(ruta, read_only=True, data_only=True)
     for hoja in libro.worksheets:
         filas = hoja.iter_rows(values_only=True)
@@ -60,10 +94,13 @@ def leer(ruta):
         for f in filas:
             dato = lambda k: f[col[k]] if k in col and col[k] < len(f) else None
             fecha, cantidad = dato("Fecha"), dato("Cantidad")
-            if not realizada(dato("Realizada")) or not isinstance(fecha, datetime) or not isinstance(cantidad, (int, float)) or cantidad <= 0:
+            if not isinstance(fecha, datetime) or not isinstance(cantidad, (int, float)) or cantidad <= 0:
                 continue
-            cat = clasificar(dato("Tipo de pago") or "", dato("Observación") or "", dato("Nombre completo") or "", cantidad)
-            yield fecha, cat, int(cantidad)
+            if not cuenta(dato("Realizada"), fecha, hoy):
+                continue
+            nombre, tipo, obs = (str(dato(k) or "") for k in ("Nombre completo", "Tipo de pago", "Observación"))
+            cat = clasificar(tipo, obs, nombre, cantidad)
+            yield fecha, cat, int(cantidad), institucion(f"{nombre} {tipo} {obs}")
 
 
 def miles(n):
@@ -76,54 +113,63 @@ def gente(n):
 
 def html(filas):
     personas, visitas, por_mes = Counter(), Counter(), Counter()
-    for fecha, cat, n in filas:
+    por_inst, lugar = Counter(), {}
+    for fecha, cat, n, inst in filas:
         personas[cat] += n
         visitas[cat] += 1
         por_mes[(fecha.year, fecha.month)] += n
+        if inst:
+            por_inst[inst[0]] += n
+            lugar[inst[0]] = inst[1:]
     total, n_visitas = sum(personas.values()), sum(visitas.values())
-    # Solo meses con visitas marcadas como realizadas; la nota de la página explica que faltan meses sin marcar.
     meses = sorted(por_mes)
     desde, hasta = meses[0], meses[-1]
-    mayor, mayor_p = personas.most_common(1)[0]
     nombre_mes = lambda m: f"{MESES[m[1] - 1]} {m[0]}"
     escolar = personas["Colegios"] + personas["Universidades"]
-    tope_cat, tope_mes = max(personas.values()), max(por_mes.values())
 
-    barras = "\n".join(
-        f'      <li><span>{c}</span><span class="valor" style="--v:{p / tope_cat:.3f}"></span>'
-        f"<span>{miles(p)} · {round(100 * p / total)} %</span></li>"
-        for c, p in personas.most_common())
-    columnas = "\n".join(
-        f'      <li style="--v:{por_mes[m] / tope_mes:.3f}" tabindex="0" data-tip="{nombre_mes(m)}: {gente(por_mes[m])}" aria-label="{nombre_mes(m)}: {gente(por_mes[m])}">'
-        f"<span class=\"valor\"></span><span aria-hidden=\"true\">{MESES[m[1] - 1]} {str(m[0])[2:]}</span></li>"
-        for m in meses)
+    # Nube: tamaño según la raíz de las personas, para que las instituciones pequeñas sigan legibles.
+    tope = max(por_inst.values()) ** 0.5
+    nube = "\n".join(
+        f'    <li style="--peso:{p ** 0.5 / tope:.2f}" title="{escape(n)}: {gente(p)}">{escape(n)}</li>'
+        for n, p in sorted(por_inst.items(), key=lambda x: zlib.crc32(x[0].encode())))  # mezcla fija, no alfabética
+
+    insts_por_mun = Counter((m, d) for m, d in lugar.values() if m)
+    santander = [(m, k) for (m, d), k in insts_por_mun.items() if d == "Santander"]
+    fuera = sorted(m if m == d else f"{m} ({d})" for (m, d) in insts_por_mun if d != "Santander")
+    fuera = ", ".join(fuera[:-1]) + " y " + fuera[-1] if len(fuera) > 1 else "".join(fuera)
+    sin_mun = sum(1 for m, d in lugar.values() if not m)
+    municipios = "\n".join(
+        f"    <li><b>{escape(m)}</b> {k} {'institución' if k == 1 else 'instituciones'}</li>"
+        for m, k in sorted(santander, key=lambda x: (-x[1], x[0])))
     tabla = "\n".join(f"          <tr><td>{nombre_mes(m)}</td><td>{miles(por_mes[m])}</td></tr>" for m in meses)
 
     return f"""{INICIO}
 <section id="visitantes" class="seccion">
   <h2>Nuestros visitantes</h2>
-  <p class="intro">Entre {nombre_mes(desde)} y {nombre_mes(hasta)} registramos {miles(n_visitas)} visitas realizadas, con {miles(total)} personas. El grupo más numeroso: {mayor.lower()}, con el {round(100 * mayor_p / total)} % de los visitantes.</p>
+  <p class="intro">Entre {nombre_mes(desde)} y {nombre_mes(hasta)} recibimos {miles(total)} personas en {miles(n_visitas)} reservas, entre ellas {len(por_inst)} colegios, universidades y fundaciones de {len(santander)} municipios de Santander y de otras regiones del país.</p>
   <ul class="cifras">
-    <li><b>{miles(total)}</b> personas nos visitaron</li>
-    <li><b>{miles(n_visitas)}</b> visitas realizadas</li>
+    <li><b>{miles(total)}</b> personas con reserva</li>
+    <li><b>{len(por_inst)}</b> instituciones educativas y sociales</li>
+    <li><b>{len(santander)}</b> municipios de Santander</li>
     <li><b>{round(100 * escolar / total)} %</b> estudiantes de colegios y universidades</li>
   </ul>
-  <h3>¿Quiénes nos visitan?</h3>
-  <ul class="grafica-tipos">
-{barras}
+  <h3>Instituciones que nos han visitado</h3>
+  <ul class="nube">
+{nube}
   </ul>
-  <h3>Personas por mes</h3>
-  <ul class="grafica-meses">
-{columnas}
+  <h3>De dónde vienen</h3>
+  <ul class="municipios">
+{municipios}
   </ul>
+  <p>También nos han visitado desde {fuera}.</p>
   <details>
-    <summary>Ver los datos en tabla</summary>
+    <summary>Ver las personas por mes</summary>
     <table class="tabla-datos">
       <tr><th>Mes</th><th>Personas</th></tr>
 {tabla}
     </table>
   </details>
-  <p class="nota">Fuente: agenda de reservas del museo. Solo se cuentan las visitas marcadas como realizadas; los meses que no aparecen no tienen esa marca en la agenda, así que el número real de visitantes es mayor. El tipo de visitante se estima a partir de las notas de cada reserva; los grupos grandes sin descripción aparecen como «otros grupos».</p>
+  <p class="nota">Fuente: agenda de reservas del museo. Se cuentan las reservas con fecha pasada, salvo las marcadas como dudosas o por confirmar. El tamaño de cada nombre indica cuántas personas trajo la institución. {sin_mun} instituciones aún no tienen municipio confirmado.</p>
 </section>
 {FIN}"""
 
@@ -136,7 +182,7 @@ def main():
         sys.exit(f"No encuentro los marcadores {INICIO} / {FIN} en index.html")
     antes, resto = texto.split(INICIO, 1)
     despues = resto.split(FIN, 1)[1]
-    pagina.write_text(antes + html(leer(ruta)) + despues, encoding="utf-8")
+    pagina.write_text(antes + html(leer(ruta, datetime.now())) + despues, encoding="utf-8")
     print("Sección de visitantes actualizada en index.html")
 
 

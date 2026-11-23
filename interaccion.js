@@ -3,7 +3,7 @@ const quieto = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 // Aparición suave de bloques y crecimiento de las gráficas al entrar en pantalla.
 if (!quieto && "IntersectionObserver" in window) {
-  const bloques = document.querySelectorAll(".seccion > h2, .seccion > .intro, .linea-tiempo li, .cifras, .ecosistemas li, .galeria li, .tarjetas article, .grafica-tipos, .grafica-meses, .dos-columnas > div");
+  const bloques = document.querySelectorAll(".seccion > h2, .seccion > .intro, .linea-tiempo li, .cifras, .ecosistemas li, .galeria li, .tarjetas article, .grafica-tipos, .nube, .dos-columnas > div");
   bloques.forEach((el) => el.classList.add("revelar"));
   const vigia = new IntersectionObserver((entradas) => {
     for (const e of entradas) {

@@ -90,17 +90,11 @@ h3 { font-size: 1.15rem; }
 .cifras li { background: #fff; border-radius: 12px; padding: 1.2rem; font-weight: 600; }
 .cifras b { font-size: 2.6rem; line-height: 1.1; }
 
-/* Gráficas de visitantes: una sola serie, un solo color; el valor exacto va en el texto y en la tabla. */
-.grafica-tipos, .grafica-meses { list-style: none; padding: 0; margin: 1rem 0 2.5rem; }
+/* Barras del explorador: una sola serie, un solo color; el valor exacto va al lado. */
+.grafica-tipos { list-style: none; padding: 0; margin: 1rem 0 2.5rem; }
 .grafica-tipos li { display: grid; grid-template-columns: minmax(8rem, 14rem) 1fr auto; align-items: center; gap: .8rem; padding: .35rem 0; }
 .grafica-tipos .valor { height: 1.1rem; width: calc(var(--v) * 100%); min-width: 4px; background: var(--verde-claro); border-radius: 0 4px 4px 0; }
 .grafica-tipos li > span:last-child { font-weight: 600; white-space: nowrap; }
-.grafica-meses { display: flex; align-items: flex-end; gap: 2px; height: 14rem; border-bottom: 1px solid #0003; overflow-x: clip; }
-.grafica-meses li { flex: 1; min-width: 0; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; position: relative; }
-.grafica-meses .valor { height: calc(var(--v) * 100%); min-height: 2px; background: var(--verde-claro); border-radius: 4px 4px 0 0; }
-.grafica-meses li:hover .valor { background: var(--verde); }
-.grafica-meses li > span:last-child { position: absolute; top: 100%; left: 50%; margin-top: .3rem; writing-mode: vertical-rl; transform: translateX(-50%) rotate(180deg); font-size: .7rem; white-space: nowrap; color: #555; }
-.grafica-meses + details { margin-top: 4rem; }
 .tabla-datos { border-collapse: collapse; margin-top: .8rem; }
 .tabla-datos td, .tabla-datos th { padding: .2rem 1rem .2rem 0; text-align: left; border-bottom: 1px solid #0001; }
 @media (max-width: 30rem) { .grafica-tipos li { grid-template-columns: 1fr auto; } .grafica-tipos .valor { grid-column: 1 / -1; grid-row: 2; } }
@@ -117,6 +111,15 @@ h3 { font-size: 1.15rem; }
 .explorador-cuerpo { display: grid; gap: 2rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr)); align-items: start; margin-top: 1.5rem; }
 /* z-index propio: las capas de Leaflet no deben quedar encima de la barra superior fija. */
 .explorador-mapa { position: relative; z-index: 0; height: clamp(20rem, 60vh, 34rem); border-radius: 12px; background: #e8e4da; }
+
+/* Nube de instituciones: el tamaño viene de --peso (0 a 1), calculado por herramientas/visitantes.py. */
+.nube { list-style: none; padding: 1.5rem; margin: 1rem 0 2.5rem; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: .3rem 1.1rem; background: #fff; border-radius: 12px; }
+.nube li { font-size: calc(.8rem + var(--peso) * 1.5rem); font-weight: calc(400 + var(--peso) * 300); line-height: 1.2; color: var(--verde); text-align: center; }
+.nube li:nth-child(3n+2) { color: var(--oscuro); }
+.nube li:nth-child(3n) { color: #7a5a35; }
+.municipios { list-style: none; padding: 0; margin: 1rem 0; display: flex; flex-wrap: wrap; gap: .5rem; }
+.municipios li { background: #fff; border-radius: 999px; padding: .35rem .9rem; font-size: .95rem; border: 1px solid #0001; }
+.municipios b { color: var(--verde); }
 
 /* Visítanos */
 .dos-columnas { display: grid; gap: 2.5rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); }
@@ -141,8 +144,6 @@ h3 { font-size: 1.15rem; }
 .revelar.visible { opacity: 1; transform: none; }
 .grafica-tipos.revelar .valor { width: 0; transition: width 1s ease .2s; }
 .grafica-tipos.visible .valor { width: calc(var(--v) * 100%); }
-.grafica-meses.revelar .valor { height: 0; transition: height .9s ease; }
-.grafica-meses.visible .valor { height: calc(var(--v) * 100%); }
 
 /* Fotos y tarjetas que responden al mouse. */
 .galeria li { overflow: hidden; border-radius: 10px; }
@@ -157,13 +158,6 @@ h3 { font-size: 1.15rem; }
 .linea-tiempo li::before { transition: transform .3s; }
 .linea-tiempo li:hover::before { transform: scale(1.5); background: var(--verde-claro); }
 
-/* Tooltip de las columnas mensuales (hover o teclado). */
-.grafica-meses li::after { content: attr(data-tip); position: absolute; bottom: calc(var(--v) * 100% + .5rem); left: 50%; transform: translateX(-50%);
-  background: var(--oscuro); color: #fff; padding: .3rem .6rem; border-radius: 6px; font-size: .8rem; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity .15s; z-index: 2; }
-.grafica-meses li:nth-child(-n+3)::after { left: 0; transform: none; }
-.grafica-meses li:nth-last-child(-n+3)::after { left: auto; right: 0; transform: none; }
-.grafica-meses li:hover::after, .grafica-meses li:focus-visible::after { opacity: 1; }
-.grafica-meses li:focus-visible { outline: 2px solid var(--verde); outline-offset: 2px; }
 
 /* Visor de fotos. */
 .visor { border: 0; padding: 0; background: transparent; max-width: min(92vw, 80rem); }
