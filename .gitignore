@@ -1,0 +1,4 @@
+# Documentos fuente: pueden tener datos internos, no se publican.
+contenido/*
+!contenido/LEEME.md
+.DS_Store

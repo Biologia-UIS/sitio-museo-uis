@@ -1,0 +1,173 @@
+/* Colores tomados de la publicidad del museo: verde selva, arena y fondo crema. */
+:root {
+  --verde: #2f5d2a;
+  --verde-claro: #40732f; /* Más oscuro que el original #4f8a3c para que el texto blanco encima pase el contraste mínimo (4.5:1). */
+  --arena: #c9a27e;
+  --oscuro: #1d241b;
+  --crema: #f6f2ea;
+  --texto: #222;
+  /* Margen lateral único: centra el contenido en 70rem y deja los fondos a todo el ancho. */
+  --margen: max(1rem, calc((100% - 70rem) / 2));
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 4.5rem; }
+body { margin: 0; font-family: Montserrat, system-ui, sans-serif; color: var(--texto); background: var(--crema); line-height: 1.6; }
+img { max-width: 100%; display: block; }
+a { color: var(--verde); }
+h1, h2 { font-family: Anton, Impact, sans-serif; font-weight: 400; letter-spacing: .02em; text-transform: uppercase; line-height: 1.1; }
+h2 { font-size: clamp(2rem, 5vw, 3rem); margin: 0 0 1rem; }
+h3 { font-size: 1.15rem; }
+
+/* Barra superior */
+.cabecera { position: sticky; top: 0; z-index: 10; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem 1.5rem; padding: .6rem var(--margen); background: var(--crema); border-bottom: 1px solid #0001; }
+.marca { display: flex; }
+.cabecera nav { display: flex; flex-wrap: wrap; gap: .25rem 1.2rem; }
+.cabecera nav a { text-decoration: none; color: var(--oscuro); font-weight: 600; font-size: .95rem; }
+.cabecera nav a:hover, .cabecera nav a:focus-visible { color: var(--verde-claro); }
+
+/* Portada */
+.portada { min-height: min(85vh, 46rem); display: flex; align-items: flex-end; padding: 2rem var(--margen) 4rem; color: #fff;
+  position: relative; overflow: hidden; isolation: isolate; background: var(--oscuro); }
+/* La foto va en una capa aparte para poder acercarla lentamente sin mover el texto. */
+.portada::before { content: ""; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(to top, #000d 15%, #0008 60%, #0004), url("img/ecosistemas/bosque-humedo.jpg") center / cover;
+  animation: acercar 24s ease-in-out infinite alternate; }
+@keyframes acercar { to { transform: scale(1.08); } }
+.portada-texto { max-width: 46rem; }
+/* Fondo claro porque las letras del logo son negras y no se leerían sobre la foto. */
+.portada-logo { width: clamp(14rem, 45vw, 24rem); height: auto; padding: .8rem 1rem; background: #fff; border-radius: 16px; box-shadow: 0 4px 16px #0006; }
+.portada h1 { font-size: clamp(2.6rem, 8vw, 5.5rem); margin: .2rem 0 1rem; }
+.etiqueta { font-weight: 600; text-transform: uppercase; font-size: .85rem; letter-spacing: .08em; color: #ecd9c4; text-shadow: 0 1px 3px #000; }
+.lema { font-size: 1.2rem; max-width: 36rem; }
+
+.boton { display: inline-block; margin-top: 1rem; padding: .8rem 1.6rem; border-radius: 999px; background: var(--verde-claro); color: #fff; font-weight: 700; text-decoration: none; }
+.boton:hover, .boton:focus-visible { background: var(--verde); }
+.boton-claro { background: #fff; color: var(--verde); }
+.boton-claro:hover, .boton-claro:focus-visible { background: var(--arena); color: var(--oscuro); }
+
+/* Secciones */
+.seccion { padding: 4rem var(--margen); }
+.seccion-oscura { background: var(--oscuro); color: #eee; }
+.seccion-oscura h3 { color: var(--arena); }
+.seccion-verde { background: var(--verde); color: #fff; }
+.seccion-verde a:not(.boton) { color: #fff; }
+.intro { font-size: 1.1rem; max-width: 48rem; }
+
+.linea-tiempo { list-style: none; padding: 0; margin: 2rem 0; border-left: 3px solid var(--arena); }
+.linea-tiempo li { padding: 0 0 1.2rem 1.2rem; position: relative; }
+.linea-tiempo li::before { content: ""; position: absolute; left: -.55rem; top: .45rem; width: .8rem; height: .8rem; border-radius: 50%; background: var(--verde); }
+.linea-tiempo b, .cifras b { display: block; font-family: Anton, Impact, sans-serif; font-weight: 400; font-size: 1.4rem; color: var(--verde); }
+
+/* Noticias */
+.noticias { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); }
+.noticias li { background: #fff; border-radius: 12px; padding: 1.2rem; border-top: 4px solid var(--verde); }
+.noticias time { font-size: .8rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--verde); }
+.noticias h3 { margin: .3rem 0 .4rem; }
+.noticias p { margin: 0; }
+
+/* Ecosistemas y galería */
+.ecosistemas, .galeria { list-style: none; padding: 0; margin: 1.5rem 0 0; display: grid; gap: .8rem; }
+.ecosistemas { grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); }
+.ecosistemas li { position: relative; border-radius: 10px; overflow: hidden; }
+.ecosistemas img { width: 100%; aspect-ratio: 16 / 7; object-fit: cover; }
+.ecosistemas span { position: absolute; left: 0; bottom: 0; padding: .4rem .8rem; background: #000a; color: #fff; font-weight: 600; border-top-right-radius: 8px; }
+.galeria { grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); margin-top: 2.5rem; }
+.galeria img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+
+/* Colecciones */
+.tarjetas { display: grid; gap: 1.2rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); margin-top: 2rem; }
+.tarjetas article { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px #0001; }
+.tarjetas img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.tarjetas h3, .tarjetas p { margin: .8rem 1rem; }
+.tarjetas p { font-size: .95rem; }
+.tarjetas p a { font-weight: 600; }
+
+.cifras { list-style: none; padding: 0; margin: 2.5rem 0 0; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); }
+.cifras li { background: #fff; border-radius: 12px; padding: 1.2rem; font-weight: 600; }
+.cifras b { font-size: 2.6rem; line-height: 1.1; }
+
+/* Gráficas de visitantes: una sola serie, un solo color; el valor exacto va en el texto y en la tabla. */
+.grafica-tipos, .grafica-meses { list-style: none; padding: 0; margin: 1rem 0 2.5rem; }
+.grafica-tipos li { display: grid; grid-template-columns: minmax(8rem, 14rem) 1fr auto; align-items: center; gap: .8rem; padding: .35rem 0; }
+.grafica-tipos .valor { height: 1.1rem; width: calc(var(--v) * 100%); min-width: 4px; background: var(--verde-claro); border-radius: 0 4px 4px 0; }
+.grafica-tipos li > span:last-child { font-weight: 600; white-space: nowrap; }
+.grafica-meses { display: flex; align-items: flex-end; gap: 2px; height: 14rem; border-bottom: 1px solid #0003; overflow-x: clip; }
+.grafica-meses li { flex: 1; min-width: 0; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; position: relative; }
+.grafica-meses .valor { height: calc(var(--v) * 100%); min-height: 2px; background: var(--verde-claro); border-radius: 4px 4px 0 0; }
+.grafica-meses li:hover .valor { background: var(--verde); }
+.grafica-meses li > span:last-child { position: absolute; top: 100%; left: 50%; margin-top: .3rem; writing-mode: vertical-rl; transform: translateX(-50%) rotate(180deg); font-size: .7rem; white-space: nowrap; color: #555; }
+.grafica-meses + details { margin-top: 4rem; }
+.tabla-datos { border-collapse: collapse; margin-top: .8rem; }
+.tabla-datos td, .tabla-datos th { padding: .2rem 1rem .2rem 0; text-align: left; border-bottom: 1px solid #0001; }
+@media (max-width: 30rem) { .grafica-tipos li { grid-template-columns: 1fr auto; } .grafica-tipos .valor { grid-column: 1 / -1; grid-row: 2; } }
+
+/* Visítanos */
+.dos-columnas { display: grid; gap: 2.5rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); }
+.nota { font-size: .95rem; margin-top: 1.5rem; }
+.tarifas { width: 100%; border-collapse: collapse; background: #fff1; border-radius: 10px; overflow: hidden; }
+.tarifas th { text-align: left; padding: .7rem .8rem .3rem; color: #fff; text-transform: uppercase; font-size: .8rem; letter-spacing: .06em; }
+.tarifas td { padding: .25rem .8rem; border-bottom: 1px solid #fff2; }
+.tarifas td:last-child { text-align: right; white-space: nowrap; font-weight: 600; }
+
+/* Pie */
+.pie { background: var(--oscuro); color: #ddd; padding: 3rem var(--margen) 1.5rem; }
+.pie a { color: var(--arena); }
+.contacto { list-style: none; padding: 0; line-height: 2; }
+.creditos { margin-top: 2rem; font-size: .85rem; color: #999; }
+
+/* ===== Interacción ===== */
+/* Aparición al desplazarse (la clase la pone interaccion.js). */
+.revelar { opacity: 0; transform: translateY(1.5rem); transition: opacity .7s ease, transform .7s ease; }
+.revelar.visible { opacity: 1; transform: none; }
+.grafica-tipos.revelar .valor { width: 0; transition: width 1s ease .2s; }
+.grafica-tipos.visible .valor { width: calc(var(--v) * 100%); }
+.grafica-meses.revelar .valor { height: 0; transition: height .9s ease; }
+.grafica-meses.visible .valor { height: calc(var(--v) * 100%); }
+
+/* Fotos y tarjetas que responden al mouse. */
+.galeria li { overflow: hidden; border-radius: 10px; }
+.ecosistemas img, .galeria img, .tarjetas img { transition: transform .5s ease; }
+.ecosistemas img, .galeria img { cursor: zoom-in; }
+.ecosistemas li:hover img, .galeria li:hover img, .tarjetas article:hover img { transform: scale(1.06); }
+.ecosistemas img:focus-visible, .galeria img:focus-visible { outline: 3px solid var(--arena); outline-offset: -3px; }
+.tarjetas article { transition: transform .3s ease, box-shadow .3s ease; }
+.tarjetas article:hover { transform: translateY(-6px); box-shadow: 0 12px 28px #0002; }
+.boton { transition: background .2s, transform .2s; }
+.boton:hover { transform: translateY(-2px); }
+.linea-tiempo li::before { transition: transform .3s; }
+.linea-tiempo li:hover::before { transform: scale(1.5); background: var(--verde-claro); }
+
+/* Tooltip de las columnas mensuales (hover o teclado). */
+.grafica-meses li::after { content: attr(data-tip); position: absolute; bottom: calc(var(--v) * 100% + .5rem); left: 50%; transform: translateX(-50%);
+  background: var(--oscuro); color: #fff; padding: .3rem .6rem; border-radius: 6px; font-size: .8rem; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity .15s; z-index: 2; }
+.grafica-meses li:nth-child(-n+3)::after { left: 0; transform: none; }
+.grafica-meses li:nth-last-child(-n+3)::after { left: auto; right: 0; transform: none; }
+.grafica-meses li:hover::after, .grafica-meses li:focus-visible::after { opacity: 1; }
+.grafica-meses li:focus-visible { outline: 2px solid var(--verde); outline-offset: 2px; }
+
+/* Visor de fotos. */
+.visor { border: 0; padding: 0; background: transparent; max-width: min(92vw, 80rem); }
+.visor::backdrop { background: #000d; }
+.visor img { max-height: 80vh; width: auto; margin: auto; border-radius: 10px; }
+.visor p { color: #fff; text-align: center; font-weight: 600; margin: .6rem 0 0; }
+.visor button { position: fixed; top: 1rem; right: 1rem; width: 2.8rem; height: 2.8rem; border: 0; border-radius: 50%; background: #fff; font-size: 1.6rem; cursor: pointer; }
+
+/* Botón flotante de reserva. */
+.flotante { position: fixed; right: 1rem; bottom: 1rem; z-index: 20; display: flex; align-items: center; gap: .5rem; padding: .75rem 1.2rem; border-radius: 999px;
+  background: var(--verde-claro); color: #fff; font-weight: 700; text-decoration: none; box-shadow: 0 6px 18px #0004; transition: transform .2s, background .2s; }
+.flotante:hover, .flotante:focus-visible { background: var(--verde); transform: translateY(-3px); }
+.flotante svg { width: 1.3rem; height: 1.3rem; fill: currentColor; }
+
+/* Menú en celular: una sola línea deslizable. */
+@media (max-width: 40rem) {
+  .cabecera nav { flex-wrap: nowrap; overflow-x: auto; width: 100%; scrollbar-width: none; padding-bottom: .2rem; }
+  .cabecera nav a { white-space: nowrap; }
+  .flotante span { display: none; }
+  .flotante { padding: .9rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  html { scroll-behavior: auto; }
+}
