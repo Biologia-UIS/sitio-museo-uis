@@ -51,3 +51,4 @@ document.querySelectorAll(".ecosistemas img, .galeria img").forEach((img) => {
   img.addEventListener("click", abrir);
   img.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); abrir(); } });
 });
+

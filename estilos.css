@@ -105,6 +105,19 @@ h3 { font-size: 1.15rem; }
 .tabla-datos td, .tabla-datos th { padding: .2rem 1rem .2rem 0; text-align: left; border-bottom: 1px solid #0001; }
 @media (max-width: 30rem) { .grafica-tipos li { grid-template-columns: 1fr auto; } .grafica-tipos .valor { grid-column: 1 / -1; grid-row: 2; } }
 
+/* Tienda: las fotos de producto se muestran completas, sin recortar. */
+.tienda img { height: auto; object-fit: contain; background: #fff; }
+.tienda .precio { font-weight: 700; color: var(--verde); }
+
+/* Explorador de colecciones */
+.explorador-elegir { display: inline-flex; flex-direction: column; gap: .3rem; font-weight: 600; margin-top: 1rem; }
+.explorador-elegir select { font: inherit; font-weight: 400; padding: .6rem .8rem; border: 2px solid var(--verde); border-radius: 8px; background: #fff; color: var(--texto); max-width: 100%; }
+.explorador-total b { font-family: Anton, Impact, sans-serif; font-weight: 400; font-size: 2.6rem; color: var(--verde); margin-right: .3rem; }
+.explorador-especies span { color: #555; }
+.explorador-cuerpo { display: grid; gap: 2rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr)); align-items: start; margin-top: 1.5rem; }
+/* z-index propio: las capas de Leaflet no deben quedar encima de la barra superior fija. */
+.explorador-mapa { position: relative; z-index: 0; height: clamp(20rem, 60vh, 34rem); border-radius: 12px; background: #e8e4da; }
+
 /* Visítanos */
 .dos-columnas { display: grid; gap: 2.5rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); }
 .nota { font-size: .95rem; margin-top: 1.5rem; }
