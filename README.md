@@ -2,7 +2,7 @@
 
 Sitio estático (HTML, CSS y un poco de JavaScript, sin dependencias) del Museo de Historia Natural de la Escuela de Biología, Universidad Industrial de Santander.
 
-- `index.html`: todo el contenido (Historia, Sala de exhibición, Colecciones, Proyectos, Visitantes, Visítanos, Contacto).
+- `index.html`: todo el contenido (Historia, Sala de exhibición, Colecciones, Nuestra ciencia, Visitantes, Visítanos, Contacto).
 - `estilos.css`: diseño.
 - `interaccion.js`: animaciones al desplazarse, contadores y visor de fotos. Sin él la página se ve completa.
 - `explorador.html` y `explorador.js`: explorador de las colecciones por municipio, con mapa de Santander.
