@@ -77,6 +77,14 @@ h3 { font-size: 1.15rem; }
 .ecosistemas span { position: absolute; left: 0; bottom: 0; padding: .4rem .8rem; background: #000a; color: #fff; font-weight: 600; border-top-right-radius: 8px; }
 .galeria { grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); margin-top: 2.5rem; }
 .galeria img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.proyecto { margin-top: 2.5rem; }
+.proyecto h3 { font-size: 1.3rem; max-width: 48rem; }
+.proyecto > p, .proyecto ol { max-width: 48rem; }
+.proyecto h4 { margin: 2rem 0 0; font-size: 1.05rem; }
+.aves { grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); }
+.aves img { aspect-ratio: 3 / 2; height: auto; }
+.aves span { position: relative; display: block; padding: .5rem .1rem 0; background: none; color: inherit; }
+.aves i { display: block; font-weight: 400; }
 
 /* Colecciones */
 .tarjetas { display: grid; gap: 1.2rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); margin-top: 2rem; }
